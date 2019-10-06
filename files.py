@@ -152,3 +152,71 @@ def daraz(name):
         except Exception as e:
             pass
     return newarr
+
+def walmart(name):
+    newarr=[]
+    search_attr=None
+    if " " in name:
+        search_attr=name.replace(" ","%20")
+    else:
+        search_attr=name
+    url=f"https://www.walmart.com/search/?query={search_attr}"
+    source=requests.get(url).text
+    soup=BeautifulSoup(source,'lxml')
+    art=soup.find_all('div',class_='search-result-gridview-item')
+    for parent in art:
+        try:
+            img_src=parent.find('div',class_='orientation-square').img['src']
+            discription=parent.find('a',class_='product-title-link').span.text
+            price=parent.find('span',class_='price-main-block').span.find('span').text
+            newobj={'discription':discription,'img':img_src,'price':price}
+            newarr.append(newobj)
+        except Exception as e:
+            pass
+        
+    return newarr
+
+def sastodeal(name):
+    newarr=[]
+    search_attr=None
+    if " " in name:
+        search_attr=name.replace(" ","+")
+    else:
+        search_attr=name
+    url=f"https://www.sastodeal.com/catalogsearch/result/?q={search_attr}"
+    source=requests.get(url).text
+    soup=BeautifulSoup(source,'lxml')
+    art=soup.find('ol',class_='product-items').find_all('li')
+    for parent in art:
+        # try:
+            img=parent.find('span',class_='product-image-wrapper').img['src']
+            discription=parent.find('a',class_='product-item-link').text
+            discription=discription.strip()
+            price=parent.find_all('span',class_='price-final_price')[-1].text
+            newobj={'discription':discription,'img':img,'price':'price'}
+            newarr.append(newobj)
+        # except Exception as e:
+        #     pass
+
+   
+    return newarr
+
+def tudoholic():
+    newarr=[]
+    headers={
+       
+        'Referer': 'https://tudoholic.com/search?type=product&q=shoes',
+        'accept-encoding': 'gzip, deflate, br',
+        'accept-language': 'en-US,en;q=0.9',
+        'content-type': 'application/x-www-form-urlencoded',
+        'cookie': 'ss=29be291bot; tawkUUID=D898KeZOSb3TnV6h1HiTTMpAde2sj4VU0gqqcQFKOUuFqhnPsdYX2U9sQJbRRIyf%7C%7C2',
+        'origin': 'https://tudoholic.com',
+        'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.129 Safari/537.36',
+        'accessToken':'07e05537bb67d15b19460a6539dfe3b4'
+    }
+    source=requests.get('https://tudoholic.com/search?type=product&q=shoes',headers=headers).text
+    soup=BeautifulSoup(source,'lxml')
+    art=soup.find('div',class_='grid-uniform').text
+    newarr.append(art)
+    return newarr
+
