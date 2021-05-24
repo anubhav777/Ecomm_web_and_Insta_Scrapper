@@ -465,8 +465,8 @@ def instagram_user():
     password=browser.find_element_by_xpath(password_xpath)
     login=browser.find_element_by_xpath(login_xpath)
     new_login=login.find_element_by_xpath('..')
-    username.send_keys('magaranub@gmail.com')
-    password.send_keys('12Anubhav@')
+    username.send_keys(os.environ.get('USER_EMAIL))
+    password.send_keys(os.environ.get('USER_EMAIL_PASSWORD))
     login.click()
     time.sleep(3)
     loc=browser.current_url
